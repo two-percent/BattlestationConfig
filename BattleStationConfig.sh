@@ -26,9 +26,9 @@ echo "Setting up logging..."
 sudo mkdir /root/logs
 mkdir ~/logs
 cat BashMod.txt >> ~/.bashrc
-sudo cat Bashmod.txt >> /root/.bashrc
+cat BashMod.txt | sudo tee -a /root/.bashrc
 cat ZshMod.txt >> ~/.zshrc
-sudo cat ZshMod.txt >> /root/.zshrc
+cat ZshMod.txt | sudo tee -a /root/.zshrc
 sed -i 's/^ZSH_THEME.*/ZSH_THEME="agnoster"/' ~/.zshrc
 sudo sed -i 's/^ZSH_THEME.*/ZSH_THEME="agnoster"/' /root/.zshrc
 chsh -s /bin/bash
