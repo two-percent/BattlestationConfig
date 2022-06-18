@@ -35,6 +35,7 @@ chsh -s /bin/bash
 sudo chsh -s /bin/bash
 
 echo "Updating system..."
+sudo apt-get update
 sudo apt-get upgrade -y
 sudo apt-get dist-upgrade
 
