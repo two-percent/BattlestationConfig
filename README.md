@@ -12,3 +12,5 @@ Current Modifications:
              Started installation script and added zshrc config
 
 2022-06-18 : Complete overhaul. https://youtu.be/araU0fZj6oQ?t=51
+
+2022-06-19 : Added in checks for all installs prior to running. Not 100% necessary for all locations, but being redundant for thoroughness sake (also to avoid issues if they were to randomly occur.. computers are silly).
