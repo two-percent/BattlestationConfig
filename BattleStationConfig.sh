@@ -106,10 +106,40 @@ else
 	echo "Root shell already set..."
 fi
 
-echo "Updating system..."
-sudo apt-get update
-sudo apt-get upgrade -y
-sudo apt-get dist-upgrade
+read -p "Update system? " -n 1 -r
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+	echo "Updating system..."
+	sudo apt-get update
+	sudo apt-get -y upgrade
+	sudo apt-get dist-upgrade
+	# save space
+	sudo apt autoremove
+fi
+
+
+# Install Packages Here
+
+sudo apt-get -y install aha python3-venv
+
+# install pipx, if needed
+if [ -z $(which pipx) ]
+then
+	echo "Installing pipx..."
+	python3 -m pip install pipx
+	python3 -m pipx ensurepath
+	# Update path without reloading ZSH and breaking script = janky bash oneliner
+	pipxLoc=$(cat ~/.zshrc | grep "export PATH" | grep -v "#" | cut -d'"' -f2)
+	export PATH=$PATH:$pipxLoc
+fi
+
+DIR=~/.local/pipx/venvs/crackmapexec/
+if [ ! -d "$DIR" ]; then
+	echo "Installing CME..."
+	pipx install crackmapexec
+else
+	echo "User CME already available..."
+fi
 
 read -p "Reboot? " -n 1 -r
 if [[ ! $REPLY =~ ^[Yy]$ ]]
