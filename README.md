@@ -3,7 +3,9 @@
 
 Current baseline configuration for internal network testing, primarily focused on Windows Active Directory (AD). Blog post in progress detailing the thought process behind what's included, as well as some operational methodology.
 
-![alt text](https://mmilkovich.files.wordpress.com/2022/06/cropped-transparent-logo-3.png "Two-Percent")
+<p align="center">
+  <img width="100" height="100" src="https://mmilkovich.files.wordpress.com/2022/06/cropped-transparent-logo-3.png">
+</p>
 
 Current Modifications:
 - Configuring Oh-My-Zsh
