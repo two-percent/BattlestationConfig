@@ -1,5 +1,5 @@
 # BattlestationConfig
-######Setup scripts for personal battlestation preferences. Will include some more CTF-Style tooling, as a heads up.
+###### Setup scripts for personal battlestation preferences. Will include some more CTF-Style tooling, as a heads up.
 
 Current baseline configuration for internal network testing, primarily focused on Windows Active Directory (AD). Blog post in progress detailing the thought process behind what's included, as well as some operational methodology.
 
