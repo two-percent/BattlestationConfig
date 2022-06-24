@@ -120,7 +120,7 @@ fi
 
 # Install Packages Here
 
-sudo apt-get -y install aha python3-venv
+sudo apt-get -y install aha python3-venv neo4j
 
 # install pipx, if needed
 if [ -z $(which pipx) ]
@@ -133,12 +133,45 @@ then
 	export PATH=$PATH:$pipxLoc
 fi
 
+# Install virtualenv managed CME (much more stable and isolated python dependencies)
 DIR=~/.local/pipx/venvs/crackmapexec/
 if [ ! -d "$DIR" ]; then
 	echo "Installing CME..."
 	pipx install crackmapexec
 else
 	echo "User CME already available..."
+fi
+
+# Download operational tooling - Make function for this? May be unnecessary
+mkdir ~/tools
+git clone https://github.com/carlospolop/PEASS-ng ~/tools/PEASS-ng
+git clone https://github.com/optiv/ScareCrow ~/tools/ScareCrow
+git clone https://github.com/mzet-/linux-exploit-suggester ~/tools/linux-exploit-suggester
+git clone https://github.com/PowerShellMafia/PowerSploit/ ~/tools/PowerSploit
+git clone https://github.com/fox-it/BloodHound.py ~/tools/BloodHound-Python
+git clone https://github.com/CompassSecurity/BloodHoundQueries ~/tools/BloodHoundQueries
+git clone https://github.com/TheWover/donut ~/tools/donut
+git clone https://github.com/FortyNorthSecurity/EXCELntDonut ~/tools/EXCELntDonut
+git clone https://github.com/orlyjamie/mimikittenz ~/tools/Mimikittenz
+git clone https://github.com/lgandx/Responder ~/tools/Responder
+
+# BloodHound latest release download
+DIR=~/tools/BloodHound/
+if [ ! -d "$DIR" ]; then
+	directory=$(curl -L https://github.com/BloodHoundAD/BloodHound/releases/latest | grep BloodHound-linux-x64.zip | grep href | cut -d'"' -f2)
+	base="https://github.com"
+	target="$base$directory"
+	wget -P ~/tools/BloodHound $target
+	unzip ~/tools/BloodHound/BloodHound-linux-x64.zip -d ~/tools/BloodHound
+	mv ~/tools/BloodHound/BloodHound-linux-x64/* ~/tools/BloodHound
+	rm -r ~/tools/BloodHound/BloodHound-linux-x64/
+	rm ~/tools/BloodHound/BloodHound-linux-x64.zip
+	chmod +x ~/tools/Bloodhound/BloodHound
+	wget https://raw.githubusercontent.com/CompassSecurity/BloodHoundQueries/master/customqueries.json -O ~/.config/bloodhound/customqueries.json
+	systemctl enable neo4j
+	systemctl start neo4j
+else
+	echo "BloodHound already installed..."
 fi
 
 read -p "Reboot? " -n 1 -r

@@ -1,5 +1,9 @@
 # BattlestationConfig
-Setup scripts for personal battlestation preferences. Will include some more CTF-Style tooling, as a heads up.
+######Setup scripts for personal battlestation preferences. Will include some more CTF-Style tooling, as a heads up.
+
+Current baseline configuration for internal network testing, primarily focused on Windows Active Directory (AD). Blog post in progress detailing the thought process behind what's included, as well as some operational methodology.
+
+![alt text](https://mmilkovich.files.wordpress.com/2022/06/cropped-transparent-logo-3.png "Two-Percent")
 
 Current Modifications:
 - Configuring Oh-My-Zsh
@@ -9,29 +13,25 @@ Current Modifications:
   - Sublime Text
   - Oh-My-Zsh (https://ohmyz.sh/)
   - CrackMapExec (https://github.com/byt3bl33d3r/CrackMapExec)
-
-2020-01-23 : Vim config added. Genereated by Vim Bootstrap.
-             Started installation script and added zshrc config
-
-2022-06-18 : Complete overhaul. https://youtu.be/araU0fZj6oQ?t=51
-
-2022-06-19 : Added in checks for all installs prior to running. Not 100% necessary for all locations, but being redundant for thoroughness sake (also to avoid issues if they were to randomly occur.. computers are silly).
-
-2022-06-21 : Added in automation for CME installation.
+  - Bloodhound (https://github.com/BloodHoundAD/BloodHound)
+  - LinPeas (https://github.com/carlospolop/PEASS-ng/tree/master/linPEAS) / Linux Exploit Suggester (https://github.com/mzet-/linux-exploit-suggester)
+  - CompassSecurity Bloodhound Custom Queries (https://github.com/CompassSecurity/BloodHoundQueries)
+  - Baseline PowerSpolit things (https://github.com/PowerShellMafia/PowerSploit/)
+  - ScareCrow (https://github.com/optiv/ScareCrow)
+  - Donut (https://github.com/TheWover/donut)
+    - EXCELnt Donut (https://github.com/FortyNorthSecurity/EXCELntDonut)
+  - Mimikittenz (https://github.com/orlyjamie/mimikittenz)
+  - Responder (https://github.com/lgandx/Responder)
 
 Planned tooling to add (including deployable tools):
-- Aquatone (https://github.com/michenriksen/aquatone)
-- Sliver C2 (https://github.com/BishopFox/sliver)
-- Responder (https://github.com/lgandx/Responder)
-- Bloodhound (https://github.com/BloodHoundAD/BloodHound)
-- CompassSecurity Bloodhound Custom Queries (https://github.com/CompassSecurity/BloodHoundQueries)
-- Baseline PowerSpolit things (https://github.com/PowerShellMafia/PowerSploit/)
-- LinPeas (https://github.com/carlospolop/PEASS-ng/tree/master/linPEAS) / Linux Exploit Suggester (https://github.com/mzet-/linux-exploit-suggester)
-- Certipy (https://github.com/mubix/Certipy)
-- Mimikittenz (https://github.com/orlyjamie/mimikittenz)
-- Donut (https://github.com/TheWover/donut)
-- ScareCrow (https://github.com/optiv/ScareCrow)
-- Burp Configuration Customizations
-- Docker (https://www.docker.com/)
-- Go (https://go.dev/)
-- Browser configurations to stop callouts
+- Aquatone (https://github.com/michenriksen/aquatone) # Requires install
+- Sliver C2 (https://github.com/BishopFox/sliver) # Need to download latest releases
+- Certipy (https://github.com/mubix/Certipy) # Requires install
+- Burp Configuration Customizations # Need to create default config
+- Docker (https://www.docker.com/) # https://docs.docker.com/engine/install/ubuntu/
+- Go (https://go.dev/) # https://go.dev/doc/install
+- Browser configurations to stop callouts # research into Firefox and Chrome silencing
+
+Note: Need to create function for determining if directory exists, rather than constantly rewriting. Poor coding practice, oops.
+
+Reboot Date - 2022-06-18 : Complete overhaul. https://youtu.be/araU0fZj6oQ?t=51
