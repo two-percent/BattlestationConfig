@@ -63,7 +63,7 @@ fi
 DIR=/root/logs/
 if sudo [ ! -d "$DIR" ]; then
 	echo "Setting up log folder..."
-	mkdir /root/logs
+	sudo mkdir /root/logs
 else
 	echo "Root log folder already set up..."
 fi
@@ -82,7 +82,7 @@ else
 	echo "Root ZSH prompt already updated..."
 fi
 
-THEME_OK=$(sudo cat /root/.zshrc | grep "agnoster")
+THEME_OK=$(sudo cat /root/.zshrc | grep 'ZSH_THEME="agnoster"')
 if [[ "" = "$THEME_OK" ]]; then
 	sudo sed -i 's/^ZSH_THEME.*/ZSH_THEME="agnoster"/' /root/.zshrc
 else
