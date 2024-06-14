@@ -115,50 +115,78 @@ then
 	sudo apt-get dist-upgrade
 	# save space
 	sudo apt autoremove
+else
+	echo
 fi
 
 
 # Install Packages Here
 
-sudo apt-get -y install aha python3-venv neo4j
+sudo apt-get -y install aha python3-venv neo4j >/dev/null
 
 # install pipx, if needed
 if [ -z $(which pipx) ]
 then
 	echo "Installing pipx..."
-	python3 -m pip install pipx
+	python3 -m pip install pipx git
 	python3 -m pipx ensurepath
 	# Update path without reloading ZSH and breaking script = janky bash oneliner
 	pipxLoc=$(cat ~/.zshrc | grep "export PATH" | grep -v "#" | cut -d'"' -f2)
 	export PATH=$PATH:$pipxLoc
 fi
 
-# Install virtualenv managed CME (much more stable and isolated python dependencies)
-DIR=~/.local/pipx/venvs/crackmapexec/
+# Install virtualenv managed NetExec (much more stable and isolated python dependencies)
+DIR=~/.local/share/pipx/venvs/netexec/
 if [ ! -d "$DIR" ]; then
-	echo "Installing CME..."
-	pipx install crackmapexec
+	echo "Installing NetExec..."
+	pipx install git+https://github.com/Pennyw0rth/NetExec
 else
-	echo "User CME already available..."
+	echo "User NetExec already available..."
 fi
 
-# Download operational tooling - Make function for this? May be unnecessary
-mkdir ~/tools
-git clone https://github.com/carlospolop/PEASS-ng ~/tools/PEASS-ng
-git clone https://github.com/optiv/ScareCrow ~/tools/ScareCrow
-git clone https://github.com/mzet-/linux-exploit-suggester ~/tools/linux-exploit-suggester
-git clone https://github.com/PowerShellMafia/PowerSploit/ ~/tools/PowerSploit
-git clone https://github.com/fox-it/BloodHound.py ~/tools/BloodHound-Python
-git clone https://github.com/CompassSecurity/BloodHoundQueries ~/tools/BloodHoundQueries
-git clone https://github.com/TheWover/donut ~/tools/donut
-git clone https://github.com/FortyNorthSecurity/EXCELntDonut ~/tools/EXCELntDonut
-git clone https://github.com/orlyjamie/mimikittenz ~/tools/Mimikittenz
-git clone https://github.com/lgandx/Responder ~/tools/Responder
+# PyEnv Installation and Impacket Versioning Fixes
+if [[ ! $(grep -i "pyenv_root" ~/.zshrc) ]]; then
+	# First PyEnv
+	echo "Installing and configuring PyEnv..."
+	curl https://pyenv.run | bash
+
+	# Install pyenv dependencies
+	sudo apt install build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev curl libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
+
+	# Install desired Python Version
+	pyenv install -v 3.10.13
+	# Then Impacket
+	pipx uninstall -y Impacket
+	pip uninstall -y Impacket
+	echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.zshrc
+	echo '[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.zshrc
+	echo 'eval "$(pyenv init -)"' >> ~/.zshrc
+	# Manually reload path in current context to avoid breakage
+	export PATH="$PATH:$HOME/.pyenv/bin"
+fi
+
+# Impacket fixing of python versioning
+pyenv global 3.10.13
+export PIPX_DEFAULT_PYTHON="$HOME/.pyenv/versions/3.10.13/bin/python"
+pipx install impacket
+
+# Download operational tooling - Make function for this? May be unnecessary, but also this looks rough.
+mkdir ~/tools 2>/dev/null
+git clone https://github.com/carlospolop/PEASS-ng ~/tools/PEASS-ng 2>/dev/null || echo "PEASS-ng already installed..."
+git clone https://github.com/optiv/ScareCrow ~/tools/ScareCrow 2>/dev/null || echo "ScareCrow already installed..."
+git clone https://github.com/mzet-/linux-exploit-suggester ~/tools/linux-exploit-suggester 2>/dev/null || echo "Linux Exploit Suggester already installed..."
+git clone https://github.com/PowerShellMafia/PowerSploit/ ~/tools/PowerSploit 2>/dev/null || echo "Powersploit already installed..."
+git clone https://github.com/fox-it/BloodHound.py ~/tools/BloodHound-Python 2>/dev/null || echo "Bloodhound-Python already installed..."
+git clone https://github.com/CompassSecurity/BloodHoundQueries ~/tools/BloodHoundQueries 2>/dev/null || echo "BloodHoundQueries already installed..."
+git clone https://github.com/TheWover/donut ~/tools/donut 2>/dev/null || echo "donut already installed..."
+git clone https://github.com/FortyNorthSecurity/EXCELntDonut ~/tools/EXCELntDonut 2>/dev/null || echo "EXCELntDonut already installed..."
+git clone https://github.com/orlyjamie/mimikittenz ~/tools/Mimikittenz 2>/dev/null || echo "Mimikittenz already installed..."
+git clone https://github.com/lgandx/Responder ~/tools/Responder 2>/dev/null || echo "Responder already installed..."
 
 # BloodHound latest release download
 DIR=~/tools/BloodHound/
 if [ ! -d "$DIR" ]; then
-	directory=$(curl -L https://github.com/BloodHoundAD/BloodHound/releases/latest | grep BloodHound-linux-x64.zip | grep href | cut -d'"' -f2)
+	directory=$(curl -LIs https://github.com/BloodHoundAD/BloodHound/releases/latest | grep BloodHound-linux-x64.zip | grep href | cut -d'"' -f2)
 	base="https://github.com"
 	target="$base$directory"
 	wget -P ~/tools/BloodHound $target
